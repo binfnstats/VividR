@@ -1,11 +1,31 @@
-Package: VIVIDR
+Package: VIVID
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Variability of Variable Importance Differences
+Version: 0.1
+Authors@R: c(
+  person(given = "Connor", family = "Smith", email = "connor.smith@sydney.edu.au", role = c("aut", "cre")),
+  person(given = "Samuel", family = "Muller", email = "sam.muller@sydney.edu.au", role = c("aut")),
+  person(given = "Boris", family = "Guennewig", email = "boris.guennewig@sydney.edu.au", role = c("aut")))
+Maintainer: Connor Smith <connor.smith@sydney.edu.au>
+Description: A package to perform the VIVID algorithm
+License: Unpublished, do not distribute.
 Encoding: UTF-8
-LazyData: true
+LazyData: false
+Imports:
+  latticeExtra,
+  tidyverse,
+  furrr,
+  glmnet,
+  parallel,
+  future,
+  dendsort,
+  stringr,
+  dplyr,
+  knitr,
+  ropls,
+  magrittr,
+  fBasics
+VignetteBuilder: knitr
+RoxygenNote: 7.0.2
+Suggests: 
+    testthat (>= 2.1.0)
