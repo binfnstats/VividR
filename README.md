@@ -47,10 +47,10 @@ outlined below.
 ## Installation
 
 ``` r
-library(devtools)
-devtools::install_github("binfnstats/VividR")
-install.packages('ropls')
-install.packages('furrr')
+library(pacman)
+pacman::p_load(ropls,furrr,devtools)
+pacman::p_load_gh("binfnstats/VividR")
+
 ```
 
 ## A quick example
