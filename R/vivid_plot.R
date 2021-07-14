@@ -22,7 +22,7 @@
 #'
 #' vivid_plot(vividObj = vividResults)
 
-vivid_plot = function(vividObj, log = TRUE, topN = 0) {
+vivid_plot = function(vividObj, log = FALSE, topN = 0) {
   vividSplit  = vividObj$vividSplit
   if (vividSplit == TRUE) {
     vividObj = vividObj[[length(vividObj)]]
@@ -63,7 +63,7 @@ vivid_plot = function(vividObj, log = TRUE, topN = 0) {
 
 
   base::switch(
-    log,
+    2-log*1,
     "TRUE" = lattice::levelplot(xlab = "Features",
                                 ylab = "Features",
                                 main = "MVP",
@@ -73,15 +73,6 @@ vivid_plot = function(vividObj, log = TRUE, topN = 0) {
                                                                     90)),
                                 aspect = "fill",
                                 colorkey = list(space = "left"),
-                                legend = list(right = list(
-                                  fun = latticeExtra::dendrogramGrob,
-                                  args = list(
-                                    x = ddCol,
-                                    ord = colOrd,
-                                    side = "right",
-                                    size = 6
-                                  )
-                                ))
     ),
     "FALSE" = lattice::levelplot(xlab = "Features",
                                  ylab = "Features",
@@ -91,16 +82,7 @@ vivid_plot = function(vividObj, log = TRUE, topN = 0) {
                                  scales = list(cex = 0.5, x = list(rot =
                                                                      90)),
                                  aspect = "fill",
-                                 colorkey = list(space = "left"),
-                                 legend = list(right = list(
-                                   fun = latticeExtra::dendrogramGrob,
-                                   args = list(
-                                     x = ddCol,
-                                     ord = colOrd,
-                                     side = "right",
-                                     size = 6
-                                   )
-                                 ))
+                                 colorkey = list(space = "left")
     )
   )
 
