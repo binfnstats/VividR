@@ -47,8 +47,9 @@ outlined below.
 ## Installation
 
 ``` r
+install.packages("pacman")
 library(pacman)
-pacman::p_load(ropls,furrr,devtools)
+pacman::p_load(calibrate,qqman,MultiDataSet,ropls,furrr,devtools)
 pacman::p_load_gh("binfnstats/VividR")
 
 ```
