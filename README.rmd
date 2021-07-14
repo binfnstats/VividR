@@ -15,7 +15,20 @@ knitr::opts_chunk$set(
 
 # VIVID: Visualisation of Variable Importance Differences
 
-The VIVID (Variability of Variable Importance Differences) package implements both a feature selection method and visualization for complex data.
+The **VIVID** (Variability of Variable Importance Differences) package implements both a feature selection method and visualization for complex data. Similar to filter methods, we utilize feature rankings but then proceed to make decisions on how these ranks change over resamples. This information is then visualized through a heat map style plot which highlights groups of features with lower variability in there rankings. When using this package, you are able to identify features which are shown to be important when modeling a response feature such as treatment and control groups of a disease. You are also then able to use visualization to see how this group of features compares with other suitable candidate groups of a similar nature.
+
+## Goals
+
+Within VIVID we aim to achieve a variety of goals which include:
+
+1. Remove the arbitrary cut-off employed when selecting the top $k$ features through a filtering style method.
+2. VIVID uses more re-sampling information before aggregating the data down to single values.
+3. Considers pairwise comparisons of importance metrics over B re-samples.
+4. Provides a visualization method, through which key features can be identified.
+
+# Methodology
+
+When a regression model is fit to data, the size of corresponding coefficients, relative to other features, highlights how important a given feature is. We use the feature rankings of these measures to then observe how pairs of features change relative to other features around them. Groups of features with smaller variability are then identified and considered a candidate group. Given a dataset where only a few features are important (sparse), the majority will have true coefficients equal to 0 creating a large group of features whose ranks vary significantly. These candidate models are then compared and the most optimal solution picked. A detailed version of the method is outlined below.
 
 ## Installation
 
@@ -70,4 +83,148 @@ From this we are able to see that most of the features can be ignored so we prod
 vivid_plot(vivid.sacurine, log = FALSE, topN = 25)
 ```
 
+From the above plots we are able to confirm the slections by the automated feature selection algorithm part of VIVID.
+
+# More Details
+
+## VIVID Method
+
+1. Obtain a dataset containing a design matrix $X$ with $p$ features and $n$ observations and a response vector $y$ of corresponding length with two classes. 
+2. Fit regression models to resampled data:
+    + Bootstrapping is performed by generating new observation weights from the data. These weights are generated from an $exp(1)$ distribution and sum to $n$.
+    + A logistic regression is then fit to each re sample using Ridge estimates.
+3. Calculate measures of feature importance $s_i$ by taking the absolute value of the regression coefficients, $s_i = |\hat{\beta}_i|$.
+4. Calculate the variance of each pairwise comparison of ranks between two features, $h_{ij} = var(r_i - r_j)$.
+5. The features are then clustered using the corresponding rows in the $p$ by $p$ matrix $H$ constructed in step (4).
+6. The algorithm then searches through the dendogram to find the groups of features with the lowest pairwise variance.
+7. Once the groups of features have been identified, the Extended Bayesian Information Criterion (EBIC) is then used to identify the best group of features.
+
+Due to the construction of a $p$ by $p$ matrix, if $p$ is two large a divide and conquer method is implemented, as seen in Figure 1.
+
+## *VIVID* feature selection
+
+The first step is to identify all the features to be included in the comparison. Since no pre-filtering step is being implemented we will use all features.
+
+```{r}
+p <- NCOL(dat) # p = 109
+p
+```
+
+The remaining parameters which can be set adjusted:
+
+- **bootstraps**: number of resamples to be completed (should change depending on data size)
+- **cores**: how many cores to use for the parallel implementation of model fitting.
+- **seed**: seven digits to allow to for reproducible results.
+- **lambda**: the values of lambda used to select the optimal regression fit; see **glmnet** for explanation.
+- **compare_method**: method of comparison between models. EBIC is chosen as the default method.
+- **gamma**: If **compare_method** = "EBIC" then this feature is used.
+- **min_size**: When identifying important sets of features when searching through the dendogram, 
+
+If no input is given, then each feature will resort to their default values:
+
+- bootstrap = 100
+- cores = 1
+- seed = 1234567
+- lambda = lambda.1se
+- compare_method = BIC
+- gamma = 1
+- min_size = 2
+
+The function returns the following outputs:
+
+- **coefficients**: a matrix containing all regression estimates from the resamples. This is a $p$ by $B$ matrix.
+- **var_mat**: a matrix containing the variance of the resampled difference in feature ranks. This is a $p$ by $p$ matrix.
+- **var_clust**: a hierarchical cluster analysis performed on the above variance matrix. This is a hclust object returned from the function **hclust**.
+- **selection**: a binary matrix which contains the features selected at each stage VIVID method. A FALSE indicates the feature is not included and a TRUE indicates the variable is included. This is a $p$ by $k$ matrix, where $k$ is the number of distinct groups of features identified.
+- **sizes**: a vector containing the sizes of all distinct groups of features identified.
+- **compare_method**: used to identify what function was supplied as an input.
+- **compare_values**: the values produced from the comparison method for the groups of features identified.
+- **opt_model**: a binary vector of length $p$ identifying the group of features which best optimize the comparison method, features are identified/ignored with the value of TRUE/FALSE respectively.
+- **opt_features**: a vector containing the names of the features in the optimal group of features.
+
+## Function Output {.tabset}
+
+### Coefficients
+
+```{r}
+vivid.sacurine$coefficients
+```
+
+### Variance matrix
+
+```{r}
+vivid.sacurine$varMat
+```
+
+### Clustering
+
+```{r}
+vivid.sacurine$varClust
+```
+
+### Feature group selection (Boolean)
+
+```{r}
+vivid.sacurine$selection
+```
+
+### Feature group sizes
+
+```{r}
+vivid.sacurine$sizes
+```
+
+### Method of comparison
+
+```{r}
+vivid.sacurine$compareMethod
+```
+
+### Comparison values
+
+```{r}
+vivid.sacurine$compareValues
+```
+
+### Best feature group (Boolean)
+
+```{r}
+vivid.sacurine$optModel
+```
+
+### Best feature group (Names)
+
+```{r}
+vivid.sacurine$optFeatures
+```
+
+## Number of features returned
+
+If the number of features returned is to small, there are several options on how to deal with this situation.
+
+1. Using the function vivid_adj() you can define the minimum number of features you require and this will select the candidate group with size larger than this group.
+
+```{r}
+# Minimum number of final features set to 10
+vivid_adj(vivid.sacurine, 
+          minFinalFeatures = 10)
+```
+
+2. Instead of running the VIVID function all over again, there is simple code to change the objective function used. To complete this use the following function:
+
+```{r eval = FALSE}
+# Change from BIC to AIC
+vivid.saccurinenew <- vivid_crit(vivid.sacurine,
+                                 x = dat,
+                                 y = outcomes,
+                                 metric = "AIC")
+```
+
+# Session info
+
+Here is the output from **sessionInfo** for the system on which this vignette was compiled.
+
+```{r}
+sessionInfo()
+```
 
