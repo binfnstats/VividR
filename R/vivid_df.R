@@ -15,6 +15,6 @@ vivid_df = function(data) {
   df = base::cbind(id = rownames(df),
                    df)
   base::rownames(df) = NULL
-  
+
   return(df)
 }

@@ -19,7 +19,7 @@
 #'
 #' vividResults = vivid(x = dat,
 #'                      y = outcomes)
-#'                      
+#'
 #' vivid_adj(vividResults,
 #' minFinalFeatures = 10)
 

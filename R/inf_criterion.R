@@ -15,13 +15,13 @@
 #' @return The value of the metric when calculated from the model.
 #'
 #' @examples
-#' 
+#'
 #' library('ropls')
 #' data("sacurine") #Load sacurine dataset from the 'ropls' package
-#' 
+#'
 #' dat = sacurine$dataMatrix
 #' outcomes = sacurine$sampleMetadata$gender
-#' 
+#'
 #' inf_criterion(model = rep(TRUE, NCOL(dat)), x = dat, y = outcomes)
 
 inf_criterion = function(model,
@@ -57,7 +57,7 @@ inf_criterion = function(model,
   ld = CVGlmFit[[lambda]] * diag(ncol(XScaled))
   H = XScaled %*% solve(t(XScaled) %*% XScaled + ld) %*% t(XScaled)
   df = fBasics::tr(H)
-  
+
   deviance = deviance(GlmFit)
 
   base::switch(

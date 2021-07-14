@@ -22,18 +22,18 @@
 #' }
 #' @export
 #'
-#' @examples 
+#' @examples
 #' library('ropls')
 #' data("sacurine") #Load sacurine dataset from the 'ropls' package
 #'
 #' dat = sacurine$dataMatrix
 #' outcomes = sacurine$sampleMetadata$gender
-#' 
+#'
 #' vividResults = vivid(x = dat,
 #'       y = outcomes)
-#'       
+#'
 #' newVivid = vivid_crit(vividObj = vividResults, x = dat, y = outcomes, metric = 'AIC')
-#' 
+#'
 #' newVivid$optFeatures
 
 vivid_crit = function(vividObj, x, y, metric) {
@@ -54,7 +54,7 @@ vivid_crit = function(vividObj, x, y, metric) {
   deviance,
   df)
   rownames(compareValues) = c("Metric", "Deviance", "df")
-    
+
   optModel = selectionPath[which.min(compareValues[1,]), ]
 
   optFeatures = base::names(x = optModel)[base::unlist(x = optModel)]

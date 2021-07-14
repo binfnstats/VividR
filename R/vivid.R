@@ -32,7 +32,7 @@
 #' }
 #' @export
 #'
-#' @examples 
+#' @examples
 
 
 vivid =
@@ -86,10 +86,10 @@ vivid =
                  workers = cores)
 
     bootstraps = furrr::future_map(lWeights,
-                                   ~ vivid_reg(.x, 
-                                               x = x, 
-                                               y = y, 
-                                               crossfold = crossfold, 
+                                   ~ vivid_reg(.x,
+                                               x = x,
+                                               y = y,
+                                               crossfold = crossfold,
                                                lambda = lambda),
                                    .options = future_options(seed = TRUE))
 
@@ -116,8 +116,8 @@ vivid =
 
     # Search across all possible heights of the clustering and compares values inside difference matrix
     search = cluster_search(hClust = varClust,
-                                    varMat = rankVarDiff,
-                                    sizeMin = minSize)
+                            varMat = rankVarDiff,
+                            sizeMin = minSize)
     # Reduce the dataframe to unique rows
     if (base::is.vector(search$features)) {
       selectionPath = search$features
@@ -132,7 +132,7 @@ vivid =
 
       # Find the best set of nested models using a selection criteria
 
-     compareValues = apply(selectionPath,
+      compareValues = apply(selectionPath,
                             1,
                             inf_criterion,
                             x = x,
@@ -141,8 +141,8 @@ vivid =
                             lambda = lambda,
                             metric = compareMethod,
                             gamma = gamma)
-     
-     rownames(compareValues) = c("Metric", "Deviance", "df")
+
+      rownames(compareValues) = c("Metric", "Deviance", "df")
       optModel = selectionPath[which.min(compareValues[1,]),]
 
     }

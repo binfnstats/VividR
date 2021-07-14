@@ -29,11 +29,11 @@
 #'
 #' dat = sacurine$dataMatrix
 #' outcomes = sacurine$sampleMetadata$gender
-#' 
+#'
 #' vividResults = vivid_split(x = dat,
 #'       y = outcomes,
 #'       groups = 2)
-#'       
+#'
 #' vividResults$optFeatures
 
 vivid_split = function(x,
@@ -87,13 +87,13 @@ vivid_split = function(x,
     }
 
     if (remainder != 0) {
-      allocation = base::c(base::rep(x = 1:groups, 
+      allocation = base::c(base::rep(x = 1:groups,
                                      times = groupSize), 1:remainder)
     }
 
     allocation = base::sample(x = allocation,
-                               size = p,
-                               replace = FALSE)
+                              size = p,
+                              replace = FALSE)
 
     for (i in 1:groups) {
       xNew = x[, allocation == i]
