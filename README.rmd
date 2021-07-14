@@ -101,6 +101,8 @@ From the above plots we are able to confirm the slections by the automated featu
 
 Due to the construction of a $p$ by $p$ matrix, if $p$ is two large a divide and conquer method is implemented, as seen in Figure 1.
 
+![Figure 1](figures/vivid_diagram.jpg)
+
 ## *VIVID* feature selection
 
 The first step is to identify all the features to be included in the comparison. Since no pre-filtering step is being implemented we will use all features.
@@ -142,19 +144,7 @@ The function returns the following outputs:
 - **opt_model**: a binary vector of length $p$ identifying the group of features which best optimize the comparison method, features are identified/ignored with the value of TRUE/FALSE respectively.
 - **opt_features**: a vector containing the names of the features in the optimal group of features.
 
-## Function Output {.tabset}
-
-### Coefficients
-
-```{r}
-vivid.sacurine$coefficients
-```
-
-### Variance matrix
-
-```{r}
-vivid.sacurine$varMat
-```
+## Selection of Different outputs
 
 ### Clustering
 
@@ -162,34 +152,11 @@ vivid.sacurine$varMat
 vivid.sacurine$varClust
 ```
 
-### Feature group selection (Boolean)
-
-```{r}
-vivid.sacurine$selection
-```
 
 ### Feature group sizes
 
 ```{r}
 vivid.sacurine$sizes
-```
-
-### Method of comparison
-
-```{r}
-vivid.sacurine$compareMethod
-```
-
-### Comparison values
-
-```{r}
-vivid.sacurine$compareValues
-```
-
-### Best feature group (Boolean)
-
-```{r}
-vivid.sacurine$optModel
 ```
 
 ### Best feature group (Names)
