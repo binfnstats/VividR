@@ -34,7 +34,7 @@ When a regression model is fit to data, the size of corresponding coefficients, 
 
 ``` r
 library(devtools)
-devtools::install_github("SmithConnor/VividR")
+devtools::install_github("binfnstats/VividR")
 install.packages('ropls')
 install.packages('furrr')
 ```

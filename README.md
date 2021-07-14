@@ -46,7 +46,7 @@ outlined below.
 
 ``` r
 library(devtools)
-devtools::install_github("SmithConnor/VividR")
+devtools::install_github("binfnstats/VividR")
 install.packages('ropls')
 install.packages('furrr')
 ```
@@ -275,6 +275,84 @@ vivid.saccurinenew <- vivid_crit(vivid.sacurine,
                                  y = outcomes,
                                  metric = "AIC")
 ```
+
+## Large number of features
+
+If the dataset has a large number of features then the variance matrix
+will be large. Since this matrix is of the order \(p^2\), we have
+implemented a divide and conquer approach. Figure 1 describes the VIVID
+method when we use this approach.
+
+The way this functions is by dividing the data into \(g\) different
+groups and then applying VIVID to each group and identifying the best
+features. We then combine those set of features and run VIVID again to
+select the final features. There are multiple ways to split the data,
+however in this package we have decided to implement only two. This is
+done by either using disjoint groups or overlapping groups as seen in
+Figure 2.
+
+![Figure 2](figures/grouping_VIVID.png)
+
+To run this version of the code, the following function is used.
+
+``` r
+groups = 5
+vivid.sacurine_split <- vivid_split(x = dat,
+                        y = outcomes,
+                        bootstraps = 75,
+                        cores = parallel::detectCores() - 1,
+                        seed = 1234567,
+                        lambda = 'lambda.min',
+                        compareMethod = 'BIC',
+                        groups = groups,
+                        disjoint = TRUE)
+```
+
+And having split the data into 5 disjoint groups, the following features
+are selected.
+
+``` r
+vivid.sacurine_split[[groups+1]]$optFeatures
+#>  [1] "X4.Acetamidobutanoic.acid.isomer.3" "Glu.Val"                           
+#>  [3] "Malic.acid"                         "N2.Acetylaminoadipic.acid"         
+#>  [5] "Oxoglutaric.acid"                   "p.Hydroxyhippuric.acid"            
+#>  [7] "p.Hydroxymandelic.acid"             "Pantothenic.acid"                  
+#>  [9] "Taurine"                            "Testosterone.glucuronide"
+```
+
+and this leads to an overlap
+of:
+
+``` r
+sum(vivid.sacurine$optFeatures %in% vivid.sacurine_split[[groups+1]]$optFeatures)
+#> [1] 7
+```
+
+between the two groups of
+size:
+
+``` r
+c(length(vivid.sacurine$optFeatures), length(vivid.sacurine_split[[groups+1]]$optFeatures))
+#> [1]  9 10
+```
+
+respectively.
+
+The resulting plot for the VIVID split method is:
+
+``` r
+vivid_plot(vivid.sacurine_split, log = FALSE)
+```
+
+![](man/figures/README-unnamed-chunk-17-1.png)<!-- -->
+
+and for the top 25 featues it is:
+
+``` r
+vivid_plot(vivid.sacurine_split, log = FALSE, topN = 25)
+```
+
+![](man/figures/README-unnamed-chunk-18-1.png)<!-- -->
 
 # Session info
 
