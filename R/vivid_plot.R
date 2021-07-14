@@ -104,7 +104,7 @@ vivid_plot = function(vividObj, log = TRUE, topN = 0) {
   }
 
   if (topN == 0){
-    topN = length(sac_ful$varClust$labels)
+    topN = length(vividObj$varClust$labels)
   }
 
   vividObj$varClust = dendsort::dendsort(d = vividObj$varClust)

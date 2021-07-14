@@ -22,7 +22,42 @@ The VIVID (Variability of Variable Importance Differences) package implements bo
 ``` r
 library(devtools)
 devtools::install_github("SmithConnor/VividR")
+install.packages('ropls')
+install.packages('furrr')
 ```
 
+```{r echo = FALSE, message=FALSE,warning=FALSE}
+library(furrr)
+library(tidyverse)
+```
+
+
 ## A quick example
+
+```{r}
+library('VIVID')
+library('ropls')
+
+data("sacurine") #Load sacurine dataset from the 'ropls' package
+
+dat <- sacurine$dataMatrix
+outcomes <- sacurine$sampleMetadata$gender
+
+vivid.sacurine <- vivid(x = dat,
+                        y = outcomes,
+                        bootstraps = 50,
+                        cores = parallel::detectCores() - 1,
+                        seed = 1234567,
+                        lambda = 'lambda.1se',
+                        compareMethod = 'BIC')
+```
+
+From the feature selection algorithm using the BIC we have selected:
+
+```{r}
+vivid.sacurine$optFeatures
+```
+
+
+
 
