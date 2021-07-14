@@ -1,0 +1,28 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+```
+
+
+# VIVID: Visualisation of Variable Importance Differences
+
+The VIVID (Variability of Variable Importance Differences) package implements both a feature selection method and visualization for complex data.
+
+## Installation
+
+``` r
+library(devtools)
+devtools::install_github("SmithConnor/VividR")
+```
+
+## A quick example
+
