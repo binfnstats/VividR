@@ -66,7 +66,7 @@ vivid_plot = function(vividObj, log = FALSE, topN = 0) {
     2-log*1,
     "TRUE" = lattice::levelplot(xlab = "Features",
                                 ylab = "Features",
-                                main = "MVP",
+                                main = "Mosaic Pairwise Variance Plot",
                                 log(vividObj$varMat[rowOrd[1:topN], colOrd[1:topN]]+1),
                                 col.regions = cc,
                                 scales = list(cex = 0.5, x = list(rot =
@@ -76,7 +76,7 @@ vivid_plot = function(vividObj, log = FALSE, topN = 0) {
     ),
     "FALSE" = lattice::levelplot(xlab = "Features",
                                  ylab = "Features",
-                                 main = "MVP",
+                                 main = "Mosaic Pairwise Variance Plot",
                                  vividObj$varMat[rowOrd[1:topN], colOrd[1:topN]],
                                  col.regions = cc,
                                  scales = list(cex = 0.5, x = list(rot =
