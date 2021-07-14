@@ -49,7 +49,7 @@ outlined below.
 ``` r
 install.packages("pacman")
 library(pacman)
-pacman::p_load(calibrate,qqman,MultiDataSet,ropls,furrr,devtools)
+pacman::p_load(calibrate,qqman,MultiDataSet,ropls,furrr,devtools,dplyr)
 pacman::p_load_gh("binfnstats/VividR")
 
 ```
