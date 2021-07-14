@@ -3,6 +3,8 @@
 
 # VIVID: Visualisation of Variable Importance Differences
 
+**Author**: Connor Smith, Samuel Mueller & Boris Guennewig
+
 The **VIVID** (Variability of Variable Importance Differences) package
 implements both a feature selection method and visualization for complex
 data. Similar to filter methods, we utilize feature rankings but then
