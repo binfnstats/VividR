@@ -5,6 +5,9 @@
 
 **Author**: Connor Smith, Samuel Mueller & Boris Guennewig
 
+Here we present a new methodology called Visualisation of Variable Importance Differences
+(VIVID), which introduces a new way of utilising feature stability through resampling. Notably our method
+identifies smaller groups of more stable features.
 The **VIVID** (Variability of Variable Importance Differences) package
 implements both a feature selection method and visualization for complex
 data. Similar to filter methods, we utilize feature rankings but then
@@ -16,6 +19,13 @@ shown to be important when modeling a response feature such as treatment
 and control groups of a disease. You are also then able to use
 visualization to see how this group of features compares with other
 suitable candidate groups of a similar nature.
+ VIVID accepts an expression matrix and a binary (case vs. control) response vector as input and subsequently outputs stable feature groups which are therefore
+relevant biomarkers. These groups tie the most relevant and stable features together to explain the given
+response vector. The features are identified through repeated resampling of importance metrics from
+regression models. A new visualisation, the Mosaic Pairwise Variance Plot, provides an overview of feature
+selection stability. VIVID selects a final set of stable biomarkers while balancing predictive performance
+and the number of selected features. This optimum model distinguishes between disease classes, while
+remaining important across changes to the samples and therefore overcomes the problem of reproducibility.
 
 ## Goals
 
@@ -27,7 +37,7 @@ Within VIVID we aim to achieve a variety of goals which include:
     down to single values.
 3.  Considers pairwise comparisons of importance metrics over B
     re-samples.
-4.  Provides a visualization method, through which key features can be
+4.  Provides a visualization method (Mosaic Pairwise Variance Plot), through which key features can be
     identified.
 
 # Methodology
@@ -85,7 +95,7 @@ vivid.sacurine$optFeatures
 #> [9] "Testosterone.glucuronide"
 ```
 
-And produces the following MVP plot for the entire 109 features on a log
+And produces the following Mosaic Pairwise Variance Plot plot for the entire 109 features on a log
 scale:
 
 ``` r
