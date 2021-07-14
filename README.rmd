@@ -34,7 +34,7 @@ library(tidyverse)
 
 ## A quick example
 
-```{r}
+```{r message = FALSE}
 library('VIVID')
 library('ropls')
 
@@ -58,6 +58,16 @@ From the feature selection algorithm using the BIC we have selected:
 vivid.sacurine$optFeatures
 ```
 
+And produces the following MVP plot for the entire 109 features on a log scale:
 
+```{r}
+vivid_plot(vivid.sacurine, log = TRUE, topN = 0)
+```
+
+From this we are able to see that most of the features can be ignored so we produce a new MVP plot with the top 25 features:
+
+```{r}
+vivid_plot(vivid.sacurine, log = FALSE, topN = 25)
+```
 
 
