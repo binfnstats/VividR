@@ -187,6 +187,59 @@ vivid.saccurinenew <- vivid_crit(vivid.sacurine,
                                  metric = "AIC")
 ```
 
+## Large number of features
+
+If the dataset has a large number of features then the variance matrix will be large. Since this matrix is of the order $p^2$, we have implemented a divide and conquer approach. Figure 1 describes the VIVID method when we use this approach.
+
+The way this functions is by dividing the data into $g$ different groups and then applying VIVID to each group and identifying the best features. We then combine those set of features and run VIVID again to select the final features. There are multiple ways to split the data, however in this package we have decided to implement only two. This is done by either using disjoint groups or overlapping groups as seen in Figure 2.
+
+![Figure 2](figures/grouping_VIVID.png)
+
+To run this version of the code, the following function is used.
+
+```{r}
+groups = 5
+vivid.sacurine_split <- vivid_split(x = dat,
+                        y = outcomes,
+                        bootstraps = 75,
+                        cores = parallel::detectCores() - 1,
+                        seed = 1234567,
+                        lambda = 'lambda.min',
+                        compareMethod = 'BIC',
+                        groups = groups,
+                        disjoint = TRUE)
+```
+
+And having split the data into 5 disjoint groups, the following features are selected.
+
+```{r}
+vivid.sacurine_split[[groups+1]]$optFeatures
+```
+
+and this leads to an overlap of:
+
+```{r}
+sum(vivid.sacurine$optFeatures %in% vivid.sacurine_split[[groups+1]]$optFeatures)
+```
+between the two groups of size:
+```{r}
+c(length(vivid.sacurine$optFeatures), length(vivid.sacurine_split[[groups+1]]$optFeatures))
+```
+respectively.
+
+The resulting plot for the VIVID split method is:
+
+```{r}
+vivid_plot(vivid.sacurine_split, log = FALSE)
+```
+
+and for the top 25 featues it is:
+
+```{r}
+vivid_plot(vivid.sacurine_split, log = FALSE, topN = 25)
+```
+
+
 # Session info
 
 Here is the output from **sessionInfo** for the system on which this vignette was compiled.

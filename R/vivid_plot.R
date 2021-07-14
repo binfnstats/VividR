@@ -25,7 +25,7 @@
 vivid_plot = function(vividObj, log = FALSE, topN = 0) {
   vividSplit  = vividObj$vividSplit
   if (vividSplit == TRUE) {
-    vividObj = vividObj[[length(vividObj)]]
+    vividObj = vividObj[[length(vividObj)-1]]
   }
 
   if (topN == 0){
