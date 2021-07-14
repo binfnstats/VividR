@@ -7,7 +7,7 @@ Authors@R: c(
   person(given = "Samuel", family = "Muller", email = "sam.muller@sydney.edu.au", role = c("aut")),
   person(given = "Boris", family = "Guennewig", email = "boris.guennewig@sydney.edu.au", role = c("aut")))
 Maintainer: Connor Smith <connor.smith@sydney.edu.au>
-Description: A package to perform the VIVID algorithm
+Description: A package to perform the VIVID algorithm.
 License: Unpublished, do not distribute.
 Encoding: UTF-8
 LazyData: false

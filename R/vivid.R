@@ -91,7 +91,7 @@ vivid =
                                                y = y,
                                                crossfold = crossfold,
                                                lambda = lambda),
-                                   .options = future_options(seed = TRUE))
+                                   .options = furrr::future_options(seed = TRUE))
 
     bootVal = vivid_df(bootstraps)
 
